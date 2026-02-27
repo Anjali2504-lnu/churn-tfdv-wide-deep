@@ -1,0 +1,6 @@
+tensorflow>=2.12
+tensorflow-data-validation>=1.14
+pandas>=2.0
+numpy>=1.23
+matplotlib>=3.7
+pytest>=7.0
