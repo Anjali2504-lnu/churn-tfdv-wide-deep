@@ -1,110 +1,83 @@
-# TensorFlow Data Validation + Wide & Deep Keras Model (Churn Lab)
+# 📊 Churn Prediction with TensorFlow Data Validation & Wide + Deep Learning
 
-> **What this lab demonstrates:** a realistic, end-to-end workflow for **tabular ML**:
-> **(1)** validate data with **TFDV**, **(2)** build a robust input pipeline, **(3)** train a **Wide & Deep** model in **Keras**, and **(4)** export artifacts for reproducibility.
+This project demonstrates a complete end-to-end machine learning workflow for tabular data using **TensorFlow Data Validation (TFDV)** and a **Wide & Deep neural network** in Keras.
 
----
-
-## 📦 What’s inside (deliverables)
-
-### Data
-- `data/telco_churn_synthetic.csv` — full dataset (synthetic, generated locally)
-- `data/train.csv`, `data/val.csv`, `data/test.csv` — splits
-- `data/test_anomalous.csv` — intentionally corrupted set to prove TFDV anomaly detection
-
-### Code
-- `src/data_validation.py` — CSV→TFRecord + TFDV stats/schema/anomaly checks + drift/skew report
-- `src/train_model.py` — Keras **Wide & Deep** model with preprocessing layers + evaluation + model export
-- `tests/test_smoke.py` — quick “does it run?” tests (optional)
-
-### Outputs (generated after running)
-- `artifacts/tfdv/` — stats, schema, anomaly text reports
-- `artifacts/model/` — saved model, metrics json, training logs
+The goal is to simulate a production-style ML pipeline that focuses not only on model accuracy, but also on **data quality, validation, and reproducibility**.
 
 ---
 
-## ✅ Lab checklist (what I did)
+## 🔍 Project Overview
 
-### Part A — Data Validation (TFDV)
-- [x] Generated dataset with **mixed feature types** (numeric + categorical)
-- [x] Computed **train/test statistics**
-- [x] Inferred **schema** from training statistics
-- [x] Validated clean test data vs schema
-- [x] Validated an intentionally **anomalous** dataset and captured anomalies
-- [x] Produced a basic **drift/skew** comparison report (train vs test)
+This lab walks through a realistic tabular ML lifecycle:
 
-### Part B — Modeling (TensorFlow / Keras)
-- [x] Built a `tf.data` pipeline reading directly from CSV
-- [x] Used **Keras preprocessing layers** (Normalization + Lookups)
-- [x] Trained a **Wide & Deep** model (functional API)
-- [x] Tracked metrics: **AUC / Precision / Recall**
-- [x] Exported a **SavedModel** for serving/reuse
+1. Validate data quality using TensorFlow Data Validation (TFDV)
+2. Build a scalable input pipeline for structured data
+3. Train a hybrid Wide & Deep neural network
+4. Export reproducible artifacts for deployment and analysis
 
 ---
 
-## 🧠 Dataset details (synthetic “telco churn”)
+## 📦 Repository Structure
 
-**Target:** `churn` (0/1)
+### 📁 Data
+- `data/telco_churn_synthetic.csv` — complete synthetic dataset  
+- `data/train.csv`, `data/val.csv`, `data/test.csv` — dataset splits  
+- `data/test_anomalous.csv` — intentionally corrupted dataset for anomaly detection  
 
-**Example features:**
-- Categorical (string): `contract_type`, `payment_method`, `internet_service`, `gender`
-- Categorical (int): `senior_citizen`, `partner`, `dependents`, `paperless_billing`
-- Numeric: `tenure_months`, `monthly_charges`, `total_charges`
+### 💻 Source Code
+- `src/data_validation.py` — performs schema inference, statistics generation, and anomaly detection using TFDV  
+- `src/train_model.py` — builds and trains a Wide & Deep Keras model with preprocessing layers  
+- `tests/test_smoke.py` — lightweight sanity checks (optional)
 
-The dataset is generated so churn is more likely for patterns like:
-- month-to-month contracts
-- electronic check payments
-- shorter tenure
-- higher monthly charges
-- senior citizens
+### 📤 Generated Outputs
+- `artifacts/tfdv/` — statistics, inferred schema, and anomaly reports  
+- `artifacts/model/` — trained model, evaluation metrics, and logs  
 
 ---
 
-## 🚀 How to run
+## ✅ Key Highlights
 
-### 1) Setup environment
+### 🧪 Data Validation with TFDV
+- Generated a synthetic churn dataset with mixed feature types  
+- Computed dataset statistics for train/test splits  
+- Automatically inferred schema from training data  
+- Validated clean datasets against schema  
+- Detected anomalies using a deliberately corrupted dataset  
+- Compared train vs test distributions for drift analysis  
+
+---
+
+### 🤖 Modeling with TensorFlow
+- Implemented an efficient `tf.data` input pipeline  
+- Used built-in preprocessing layers for normalization and categorical encoding  
+- Designed a Wide & Deep neural network using Keras Functional API  
+- Evaluated performance using AUC, Precision, and Recall  
+- Exported a deployable TensorFlow SavedModel  
+
+---
+
+## 🧠 Dataset Description
+
+This project uses a **synthetic telco churn dataset** designed to resemble real-world customer behavior.
+
+**Target variable:** `churn` (binary classification)
+
+**Feature types:**
+- String categorical: contract type, payment method, internet service, gender  
+- Binary categorical: partner, dependents, senior citizen, paperless billing  
+- Numerical: tenure months, monthly charges, total charges  
+
+The data generation logic introduces realistic churn patterns such as:
+- Higher churn for short-term contracts  
+- Increased churn with higher monthly charges  
+- Lower retention for customers with shorter tenure  
+
+---
+
+## 🚀 How to Run
+
+### 1️⃣ Create environment
 ```bash
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-```
-
-### 2) Run TFDV validation
-```bash
-mkdir -p artifacts/tfdv
-python src/data_validation.py --data_dir data --out_dir artifacts/tfdv
-```
-
-Check:
-- `artifacts/tfdv/anomalies_test.txt`
-- `artifacts/tfdv/anomalies_test_anomalous.txt`
-- `artifacts/tfdv/schema.pbtxt`
-
-### 3) Train the Keras model
-```bash
-mkdir -p artifacts/model
-python src/train_model.py --data_dir data --out_dir artifacts/model --epochs 8 --batch_size 64
-```
-
-Check:
-- `artifacts/model/eval_metrics.json`
-- `artifacts/model/saved_model/`
-- `artifacts/model/training_log.csv`
-
----
-
-## 🧪 Optional: run tests
-```bash
-pytest -q
-```
-
----
-
-## 📝 Notes
-- This project is **TensorFlow-first** and does not depend on external downloads.
-- The anomalous dataset is intentionally broken (unexpected categories, missing values, extreme numeric values) to showcase TFDV’s reports.
-
----
-
-## Author
-Manoj
